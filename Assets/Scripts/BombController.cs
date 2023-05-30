@@ -19,7 +19,9 @@ public class BombController : MonoBehaviour
     public int explosionRadius = 1;
 
     [Header("Destructible")]
+    [HideInInspector]
     public Tilemap destructibleTiles;
+    [HideInInspector]
     public Destructible destructiblePrefab;
 
 

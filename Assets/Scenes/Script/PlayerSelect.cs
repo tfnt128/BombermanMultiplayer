@@ -16,13 +16,11 @@ public class PlayerSelect : MonoBehaviour
 
     private void Start()
     {
-        photonView = this.GetComponent<PhotonView>();
-
+        photonView = GetComponent<PhotonView>();
         if (!photonView.IsMine)
         {
             myPlayerCanvas.gameObject.SetActive(false);
         }
-
         SwitchPlayer();
     }
 
