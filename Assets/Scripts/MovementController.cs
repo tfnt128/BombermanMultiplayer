@@ -1,3 +1,5 @@
+using Photon.Pun;
+using Photon.Pun.Demo.Asteroids;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -21,6 +23,8 @@ public class MovementController : MonoBehaviour
     public AnimatedSpriteRenderer spriteRendererDeath;
     private AnimatedSpriteRenderer activeSpriteRenderer;
 
+    public PhotonView photonview;
+
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody2D>();
@@ -29,25 +33,42 @@ public class MovementController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(inputUp)) {
-            SetDirection(Vector2.up, spriteRendererUp);
-        } else if (Input.GetKey(inputDown)) {
-            SetDirection(Vector2.down, spriteRendererDown);
-        } else if (Input.GetKey(inputLeft)) {
-            SetDirection(Vector2.left, spriteRendererLeft);
-        } else if (Input.GetKey(inputRight)) {
-            SetDirection(Vector2.right, spriteRendererRight);
-        } else {
-            SetDirection(Vector2.zero, activeSpriteRenderer);
+        if (photonview.IsMine)
+        {
+            if (Input.GetKey(inputUp))
+            {
+                SetDirection(Vector2.up, spriteRendererUp);
+            }
+            else if (Input.GetKey(inputDown))
+            {
+                SetDirection(Vector2.down, spriteRendererDown);
+            }
+            else if (Input.GetKey(inputLeft))
+            {
+                SetDirection(Vector2.left, spriteRendererLeft);
+            }
+            else if (Input.GetKey(inputRight))
+            {
+                SetDirection(Vector2.right, spriteRendererRight);
+            }
+            else
+            {
+                SetDirection(Vector2.zero, activeSpriteRenderer);
+            }
         }
+        
     }
 
     private void FixedUpdate()
     {
-        Vector2 position = rigidbody.position;
-        Vector2 translation = direction * speed * Time.fixedDeltaTime;
+        if (photonview.IsMine)
+        {
+            Vector2 position = rigidbody.position;
+            Vector2 translation = direction * speed * Time.fixedDeltaTime;
 
-        rigidbody.MovePosition(position + translation);
+            rigidbody.MovePosition(position + translation);
+        }
+        
     }
 
     private void SetDirection(Vector2 newDirection, AnimatedSpriteRenderer spriteRenderer)
@@ -66,10 +87,11 @@ public class MovementController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Explosion")) {
-            DeathSequence();
+            Die();
         }
     }
 
+    [PunRPC]
     private void DeathSequence()
     {
         enabled = false;
@@ -81,13 +103,25 @@ public class MovementController : MonoBehaviour
         spriteRendererRight.enabled = false;
         spriteRendererDeath.enabled = true;
 
-        Invoke(nameof(OnDeathSequenceEnded), 1.25f);
+        Invoke(nameof(deathSequenceEnd), 1.25f);
     }
 
+    [PunRPC]
     private void OnDeathSequenceEnded()
     {
         gameObject.SetActive(false);
         FindObjectOfType<GameManager>().CheckWinState();
     }
+    void deathSequenceEnd()
+    {
+        photonview.RPC("OnDeathSequenceEnded", RpcTarget.All);
+    }
+
+    void Die()
+    {
+         photonview.RPC("DeathSequence", RpcTarget.All);       
+    }
+
+    
 
 }

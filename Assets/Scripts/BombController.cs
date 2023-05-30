@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -21,18 +22,25 @@ public class BombController : MonoBehaviour
     public Tilemap destructibleTiles;
     public Destructible destructiblePrefab;
 
+
+    public PhotonView photonView;
     private void OnEnable()
     {
         bombsRemaining = bombAmount;
     }
-
+    private void Start()
+    {
+        destructibleTiles = GameObject.FindGameObjectWithTag("DES").GetComponent<Tilemap>();
+    }
     private void Update()
     {
-        if (bombsRemaining > 0 && Input.GetKeyDown(inputKey)) {
-            StartCoroutine(PlaceBomb());
+        if (bombsRemaining > 0 && Input.GetKeyDown(inputKey))
+        {
+            PlaceBombCoroutine();
         }
     }
 
+    [PunRPC]
     private IEnumerator PlaceBomb()
     {
         Vector2 position = transform.position;
@@ -57,13 +65,30 @@ public class BombController : MonoBehaviour
         Explode(position, Vector2.left, explosionRadius);
         Explode(position, Vector2.right, explosionRadius);
 
+        
         Destroy(bomb.gameObject);
         bombsRemaining++;
     }
 
+    [PunRPC]
+    void PlaceBombCoroutine()
+    {
+        StartCoroutine(PlaceBomb());
+
+        photonView.RPC("PlaceBombNetwork", RpcTarget.All);
+    }
+
+    [PunRPC]
+    void PlaceBombNetwork()
+    {
+        StartCoroutine(PlaceBomb());
+    }
+
+    [PunRPC]
     private void Explode(Vector2 position, Vector2 direction, int length)
     {
-        if (length <= 0) {
+        if (length <= 0)
+        {
             return;
         }
 
@@ -83,6 +108,12 @@ public class BombController : MonoBehaviour
         Explode(position, direction, length - 1);
     }
 
+    void ExplodeNetwork(Vector2 position, Vector2 direction, int length)
+    {
+        photonView.RPC("Explode", RpcTarget.All, position, direction, length);
+    }
+
+    
     private void ClearDestructible(Vector2 position)
     {
         Vector3Int cell = destructibleTiles.WorldToCell(position);
@@ -94,6 +125,13 @@ public class BombController : MonoBehaviour
             destructibleTiles.SetTile(cell, null);
         }
     }
+    void ClearDestruibleNetwork(Vector2 position)
+    {
+        ClearDestructible(position);
+
+        photonView.RPC("ClearDestructible", RpcTarget.All, position);
+    }
+
 
     public void AddBomb()
     {
@@ -103,7 +141,8 @@ public class BombController : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Bomb")) {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Bomb"))
+        {
             other.isTrigger = false;
         }
     }

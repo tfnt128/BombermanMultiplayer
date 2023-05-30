@@ -1,7 +1,15 @@
+using Photon.Pun;
 using UnityEngine;
 
 public class ItemPickup : MonoBehaviour
 {
+    public PhotonView photonView;
+    
+
+    private void Start()
+    {
+        //photonView = GameObject.FindGameObjectWithTag("PHOTON").GetComponent<PhotonView>();
+    }
     public enum ItemType
     {
         ExtraBomb,
@@ -11,9 +19,12 @@ public class ItemPickup : MonoBehaviour
 
     public ItemType type;
 
-    private void OnItemPickup(GameObject player)
+    [PunRPC]
+    private void OnItemPickup(int playerId, ItemType itemType)
     {
-        switch (type)
+        GameObject player = PhotonView.Find(playerId).gameObject;
+
+        switch (itemType)
         {
             case ItemType.ExtraBomb:
                 player.GetComponent<BombController>().AddBomb();
@@ -31,10 +42,22 @@ public class ItemPickup : MonoBehaviour
         Destroy(gameObject);
     }
 
+    void OnItemPickupNetwork(int playerId, ItemType itemType)
+    {
+        photonView.RPC("OnItemPickup", RpcTarget.All, playerId, itemType);
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player")) {
-            OnItemPickup(other.gameObject);
+        if (other.CompareTag("Player"))
+        {
+            photonView = other.GetComponentInParent<PhotonView>();
+
+            if (photonView != null)
+            {
+                int playerId = photonView.ViewID;
+                OnItemPickupNetwork(playerId, type);
+            }
         }
     }
 
