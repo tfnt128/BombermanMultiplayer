@@ -59,13 +59,14 @@ public class BombController : MonoBehaviour
         position.y = Mathf.Round(position.y);
 
         Explosion explosion = Instantiate(explosionPrefab, position, Quaternion.identity);
-        explosion.SetActiveRenderer(explosion.start);
-        explosion.DestroyAfter(explosionDuration);
+        explosion.reference(photonView);
+        explosion.SetActiveRendererNetwork(explosion.start);
+        explosion.destroyAfterNetwork(explosionDuration);
 
-        Explode(position, Vector2.up, explosionRadius);
-        Explode(position, Vector2.down, explosionRadius);
-        Explode(position, Vector2.left, explosionRadius);
-        Explode(position, Vector2.right, explosionRadius);
+        ExplodeNetwork(position, Vector2.up, explosionRadius);
+        ExplodeNetwork(position, Vector2.down, explosionRadius);
+        ExplodeNetwork(position, Vector2.left, explosionRadius);
+        ExplodeNetwork(position, Vector2.right, explosionRadius);
 
         
         Destroy(bomb.gameObject);
@@ -75,8 +76,6 @@ public class BombController : MonoBehaviour
     [PunRPC]
     void PlaceBombCoroutine()
     {
-        StartCoroutine(PlaceBomb());
-
         photonView.RPC("PlaceBombNetwork", RpcTarget.All);
     }
 
@@ -98,16 +97,17 @@ public class BombController : MonoBehaviour
 
         if (Physics2D.OverlapBox(position, Vector2.one / 2f, 0f, explosionLayerMask))
         {
-            ClearDestructible(position);
+            ClearDestruibleNetwork(position);
             return;
         }
 
         Explosion explosion = Instantiate(explosionPrefab, position, Quaternion.identity);
-        explosion.SetActiveRenderer(length > 1 ? explosion.middle : explosion.end);
-        explosion.SetDirection(direction);
-        explosion.DestroyAfter(explosionDuration);
+        explosion.reference(photonView);
+        explosion.SetActiveRendererNetwork(length > 1 ? explosion.middle : explosion.end);
+        explosion.SetDirectionNetwork(direction);
+        explosion.destroyAfterNetwork(explosionDuration);
 
-        Explode(position, direction, length - 1);
+        ExplodeNetwork(position, direction, length - 1);
     }
 
     void ExplodeNetwork(Vector2 position, Vector2 direction, int length)
@@ -115,7 +115,8 @@ public class BombController : MonoBehaviour
         photonView.RPC("Explode", RpcTarget.All, position, direction, length);
     }
 
-    
+
+    [PunRPC]    
     private void ClearDestructible(Vector2 position)
     {
         Vector3Int cell = destructibleTiles.WorldToCell(position);
@@ -129,12 +130,10 @@ public class BombController : MonoBehaviour
     }
     void ClearDestruibleNetwork(Vector2 position)
     {
-        ClearDestructible(position);
-
         photonView.RPC("ClearDestructible", RpcTarget.All, position);
     }
 
-
+    [PunRPC]
     public void AddBomb()
     {
         bombAmount++;

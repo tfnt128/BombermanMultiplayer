@@ -76,6 +76,7 @@ MonoBehaviour:
   start: {fileID: 6502963458885894632}
   middle: {fileID: 6398714110581251344}
   end: {fileID: 3772248313485759971}
+  photonView: {fileID: 0}
 --- !u!1 &1032164902837596891
 GameObject:
   m_ObjectHideFlags: 0
