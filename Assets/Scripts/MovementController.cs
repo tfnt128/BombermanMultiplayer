@@ -82,19 +82,20 @@ public class MovementController : MonoBehaviour
             {
                 screenManager.Instance.ShowVictoryScreen();
             }
-
-            gameObject.SetActive(false);
         }
+
+        gameObject.SetActive(false);
     }
 
     void DeathSequenceEnd()
     {
-        _photonview.RPC("OnDeathSequenceEnded", RpcTarget.All, true);
+        _photonview.RPC("OnDeathSequenceEnded", RpcTarget.All, isDead);
     }
 
     void Die()
     {
         _photonview.RPC("DeathSequence", RpcTarget.All);
     }
+
 
 }
