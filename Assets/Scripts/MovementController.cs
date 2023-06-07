@@ -48,39 +48,57 @@ public class MovementController : MonoBehaviour
     }
 
     //PUUUUUN
+    private bool isDead = false;
+
     [PunRPC]
     private void DeathSequence()
     {
+        if (isDead)
+        {
+            return;
+        }
+
+        isDead = true;
+
         enabled = false;
         GetComponent<BombController>().enabled = false;
-        Invoke(nameof(DeathSequenceEnd), 1.25f);
+
+        if (_photonview.IsMine)
+        {
+            Invoke(nameof(DeathSequenceEnd), 1.25f);
+        }
     }
 
     [PunRPC]
-    private void OnDeathSequenceEnded(bool isLocalPlayer)
+    private void OnDeathSequenceEnded(bool isLocalPlayer, bool isDefeated)
     {
         if (isLocalPlayer)
         {
-            screenManager.Instance.ShowDefeatScreen();
+            if (isDefeated)
+            {
+                screenManager.Instance.ShowDefeatScreen();
+            }
+            else
+            {
+                screenManager.Instance.ShowVictoryScreen();
+            }
         }
-        else
-        {
-            screenManager.Instance.ShowVictoryScreen();
-        }
-    
-        gameObject.SetActive(false);
+        
+            gameObject.SetActive(false);
+        
     }
-
 
     void DeathSequenceEnd()
     {
-        _photonview.RPC("OnDeathSequenceEnded", RpcTarget.All, _photonview.IsMine);
+        _photonview.RPC("OnDeathSequenceEnded", RpcTarget.All, _photonview.IsMine, true);
     }
 
     void Die()
     {
-        _photonview.RPC("DeathSequence", RpcTarget.All);       
+        _photonview.RPC("DeathSequence", RpcTarget.All);
     }
+
+
 
 
     
