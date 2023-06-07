@@ -71,7 +71,7 @@ public class BombController : MonoBehaviourPunCallbacks
         ExplodeNetwork(position, Vector2.left, explosionRadius);
         ExplodeNetwork(position, Vector2.right, explosionRadius);
 
-        Destroy(bomb.gameObject);
+        PhotonNetwork.Destroy(bomb.gameObject);
         bombsRemaining++;
     }
 
