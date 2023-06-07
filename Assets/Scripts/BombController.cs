@@ -117,7 +117,7 @@ public class BombController : MonoBehaviourPunCallbacks
         photonView.RPC("Explode", RpcTarget.All, position, direction, length);
     }
 
-    [PunRPC]    
+    [PunRPC]
     private void ClearDestructible(Vector2 position)
     {
         Vector3Int cell = destructibleTiles.WorldToCell(position);
@@ -125,18 +125,18 @@ public class BombController : MonoBehaviourPunCallbacks
 
         if (tile != null)
         {
-
-            PhotonNetwork.Instantiate(destructiblePrefab.name, position, Quaternion.identity);
-
             destructibleTiles.SetTile(cell, null);
         }
     }
 
-
     void ClearDestructibleNetwork(Vector2 position)
     {
         Debug.Log("ClearDestructibleNetwork called at position: " + position);
-        photonView.RPC("ClearDestructible", RpcTarget.All, position);
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            photonView.RPC("ClearDestructible", RpcTarget.All, position);
+        }
     }
 
     [PunRPC]
