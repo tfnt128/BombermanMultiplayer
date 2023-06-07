@@ -3,9 +3,9 @@ using Photon.Pun.Demo.Asteroids;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class MovementController : MonoBehaviour
+public class MovementController : MonoBehaviourPunCallbacks
 {
-    private PhotonView _photonview;
+    private PhotonView _photonView;
 
     public float speed = 5f;
     
@@ -15,39 +15,43 @@ public class MovementController : MonoBehaviour
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
-        _photonview = GetComponent<PhotonView>();
+        _photonView = GetComponent<PhotonView>();
     }
+    
     private void Update()
     {
-        if (_photonview.IsMine)
+        if (_photonView.IsMine)
         {
             float hor = Input.GetAxis("Horizontal");
             float ver = Input.GetAxis("Vertical");
             SetDirection(new Vector2(hor,ver));
         }
-        
     }
+    
     private void FixedUpdate()
     {
-        if (_photonview.IsMine)
+        if (_photonView.IsMine)
         {
             Vector2 position = _rigidbody.position;
             Vector2 translation = direction * (speed * Time.fixedDeltaTime);
             _rigidbody.MovePosition(position + translation);
         }
     }
+    
     private void SetDirection(Vector2 newDirection)
     {
         direction = newDirection;
     }
+    
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Explosion")) {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Explosion"))
+        {
             Die();
         }
     }
 
-    //PUUUUUN
+    // PUN
     private bool isDead = false;
 
     [PunRPC]
@@ -63,7 +67,7 @@ public class MovementController : MonoBehaviour
         enabled = false;
         GetComponent<BombController>().enabled = false;
 
-        if (_photonview.IsMine)
+        if (_photonView.IsMine)
         {
             Invoke(nameof(DeathSequenceEnd), 1.25f);
         }
@@ -72,7 +76,7 @@ public class MovementController : MonoBehaviour
     [PunRPC]
     private void OnDeathSequenceEnded(bool isDefeated)
     {
-        if (_photonview.IsMine)
+        if (_photonView.IsMine)
         {
             if (isDefeated)
             {
@@ -87,15 +91,13 @@ public class MovementController : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    void DeathSequenceEnd()
+    private void DeathSequenceEnd()
     {
-        _photonview.RPC("OnDeathSequenceEnded", RpcTarget.All, isDead);
+        _photonView.RPC("OnDeathSequenceEnded", RpcTarget.All, !isDead);
     }
 
-    void Die()
+    private void Die()
     {
-        _photonview.RPC("DeathSequence", RpcTarget.All);
+        _photonView.RPC("DeathSequence", RpcTarget.All);
     }
-
-
 }

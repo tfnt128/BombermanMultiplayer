@@ -16180,7 +16180,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: CU BOSTA MIJO
+  m_text: WIN
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -23622,6 +23622,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2687661859372944299, guid: 44e5ad9940e31fc4d902df3e68e54338, type: 3}
+      propertyPath: net
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3722048244076834823, guid: 44e5ad9940e31fc4d902df3e68e54338, type: 3}
       propertyPath: sceneViewId
       value: 1
@@ -23676,7 +23680,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6628809854859807679, guid: 44e5ad9940e31fc4d902df3e68e54338, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7873888217847083874, guid: 44e5ad9940e31fc4d902df3e68e54338, type: 3}
       propertyPath: m_IsActive
@@ -28992,7 +28996,7 @@ GameObject:
   - component: {fileID: 626584694}
   m_Layer: 0
   m_Name: NetWorkController
-  m_TagString: Untagged
+  m_TagString: NET
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29014,8 +29018,9 @@ MonoBehaviour:
   lobbyPn: {fileID: 1708143450}
   roomNameInput: {fileID: 1254256325}
   playerPUN: {fileID: 1425271653}
-  player1Pos: {fileID: 1302137858}
-  player2Pos: {x: 0, y: 0, z: 0}
+  player1Pos: {fileID: 1302137859}
+  player2Pos: {fileID: 1640232500}
+  isLocalPlayer1: 0
 --- !u!4 &626584695
 Transform:
   m_ObjectHideFlags: 0
@@ -43775,7 +43780,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: SORVETE CREMOSO
+  m_text: LOSE
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

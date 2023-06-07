@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d061cefcaee1a744b985afee7e3f766, type: 3}
   m_Name: RedPlayerData
   m_EditorClassIdentifier: 
-  playerIcon: {fileID: 21300000, guid: 83cfe801870792c45863f21befb7d558, type: 3}
+  playerIcon: {fileID: -7905520708037107564, guid: 399526844e7714b45bcc6061f5e4a2c8, type: 3}

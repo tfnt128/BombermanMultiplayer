@@ -258,6 +258,7 @@ MonoBehaviour:
   playerList: {fileID: 5244698971042922033}
   playerIconCanvas: {fileID: 6628809855212691428}
   myPlayerCanvas: {fileID: 7367116316394892821}
+  isPlayer1On: 0
 --- !u!114 &3722048244076834823
 MonoBehaviour:
   m_ObjectHideFlags: 0
