@@ -41,7 +41,7 @@ public class BombController : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if (bombsRemaining > 0 && Input.GetKeyDown(inputKey))
+        if (bombsRemaining > 0 && Input.GetKeyDown(inputKey) && photonView.IsMine)
         {
             PlaceBombCoroutine();
         }
