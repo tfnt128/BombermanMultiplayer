@@ -20,9 +20,10 @@ public class NetworkController : MonoBehaviourPunCallbacks
     [Header("PLAYER")]
     public GameObject playerPUN;
 
-    public GameObject player1Pos;
-    public Vector3 player2Pos;
+    public Transform player1Pos;
+    public Transform player2Pos;
 
+    public bool isLocalPlayer1 = false; // Indica se o jogador local é o jogador 1
 
     void Start()
     {
@@ -104,5 +105,10 @@ public class NetworkController : MonoBehaviourPunCallbacks
         Vector3 pos = player1Pos.transform.position;
 
         PhotonNetwork.Instantiate(playerPUN.name, pos, playerPUN.transform.rotation,0);
+    }
+    
+    public bool IsPlayer1()
+    {
+        return isLocalPlayer1;
     }
 }

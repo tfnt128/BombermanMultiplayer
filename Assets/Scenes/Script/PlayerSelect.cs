@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class PlayerSelect : MonoBehaviour
+public class PlayerSelect : MonoBehaviourPunCallbacks
 {
     public int playerSelected = 0;
     public GameObject playerList;
@@ -13,10 +13,16 @@ public class PlayerSelect : MonoBehaviour
 
     PhotonView photonView;
     public GameObject myPlayerCanvas;
+    private NetworkController net;
+
+    public bool isPlayer1On;
 
     private void Start()
     {
+        isPlayer1On = true;
         photonView = GetComponent<PhotonView>();
+        net = FindObjectOfType<NetworkController>();
+
         if (!photonView.IsMine)
         {
             myPlayerCanvas.gameObject.SetActive(false);
@@ -43,11 +49,21 @@ public class PlayerSelect : MonoBehaviour
     public void ButtonRightRPC()
     {
         playerSelected++;
-
+        
         if (playerSelected > (playerList.transform.childCount - 1))
         {
+            
             playerSelected = 0;
+            if (net.IsPlayer1())
+            {
+                transform.position = net.player1Pos.position;
+            }
+            else
+            {
+                transform.position = net.player2Pos.position;
+            }
         }
+        isPlayer1On = true;
         SwitchPlayer();
     }
 
@@ -58,8 +74,18 @@ public class PlayerSelect : MonoBehaviour
 
         if (playerSelected < 0)
         {
+            
             playerSelected = playerList.transform.childCount - 1;
+            if (net.IsPlayer1())
+            {
+                
+            }
+            else
+            {
+                
+            }
         }
+        isPlayer1On = false;
         SwitchPlayer();
     }
 
@@ -71,6 +97,8 @@ public class PlayerSelect : MonoBehaviour
         {
             if (i == playerSelected)
             {
+                isPlayer1On = true;
+                transform.position = net.player1Pos.position;
                 item.gameObject.SetActive(true);
 
                 if (item.gameObject.GetComponent<PlayerConfig>())
@@ -80,11 +108,11 @@ public class PlayerSelect : MonoBehaviour
             }
             else
             {
+                isPlayer1On = false;
+                transform.position = net.player2Pos.position;
                 item.gameObject.SetActive(false);
             }
             i++;
         }
     }
-
-
 }
