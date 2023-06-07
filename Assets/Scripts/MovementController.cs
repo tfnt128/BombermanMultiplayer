@@ -70,9 +70,9 @@ public class MovementController : MonoBehaviour
     }
 
     [PunRPC]
-    private void OnDeathSequenceEnded(bool isLocalPlayer, bool isDefeated)
+    private void OnDeathSequenceEnded(bool isDefeated)
     {
-        if (isLocalPlayer)
+        if (_photonview.IsMine)
         {
             if (isDefeated)
             {
@@ -82,25 +82,19 @@ public class MovementController : MonoBehaviour
             {
                 screenManager.Instance.ShowVictoryScreen();
             }
-        }
-        
+
             gameObject.SetActive(false);
-        
+        }
     }
 
     void DeathSequenceEnd()
     {
-        _photonview.RPC("OnDeathSequenceEnded", RpcTarget.All, _photonview.IsMine, true);
+        _photonview.RPC("OnDeathSequenceEnded", RpcTarget.All, true);
     }
 
     void Die()
     {
         _photonview.RPC("DeathSequence", RpcTarget.All);
     }
-
-
-
-
-    
 
 }
