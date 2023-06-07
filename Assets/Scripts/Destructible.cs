@@ -18,8 +18,7 @@ public class Destructible : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        Debug.Log("AAAAAAAAAAA");
-        if (PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient && photonView.IsMine)
         {
             DestroyAfterNetwork();
         }
@@ -28,6 +27,9 @@ public class Destructible : MonoBehaviourPunCallbacks
     [PunRPC]
     private void DestroyAfterNetwork()
     {
-        PhotonNetwork.Destroy(gameObject);
+        if (photonView.IsMine)
+        {
+            PhotonNetwork.Destroy(gameObject);
+        }
     }
 }
