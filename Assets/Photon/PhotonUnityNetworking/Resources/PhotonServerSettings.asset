@@ -52,6 +52,14 @@ MonoBehaviour:
   - PlaceBombNetwork
   - OnItemPickup
   - PlaceBombCoroutine
+  - DestroyAfter
+  - SetActiveRenderer
+  - SetDirection
+  - AddBomb
+  - reference
+  - DestroyAfterNetwork
+  - SetDirectionNetwork
+  - SpawnItemNetwork
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

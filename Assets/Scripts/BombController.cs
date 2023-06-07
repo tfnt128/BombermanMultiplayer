@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class BombController : MonoBehaviour
+public class BombController : MonoBehaviourPunCallbacks
 {
     [Header("Bomb")]
     public KeyCode inputKey = KeyCode.LeftShift;
@@ -19,21 +19,26 @@ public class BombController : MonoBehaviour
     public int explosionRadius = 1;
 
     [Header("Destructible")]
-    [HideInInspector]
     public Tilemap destructibleTiles;
-    [HideInInspector]
     public Destructible destructiblePrefab;
 
+    private PhotonView photonView;
 
-    public PhotonView photonView;
     private void OnEnable()
     {
         bombsRemaining = bombAmount;
     }
+
+    private void Awake()
+    {
+        photonView = GetComponent<PhotonView>();
+    }
+
     private void Start()
     {
         destructibleTiles = GameObject.FindGameObjectWithTag("DES").GetComponent<Tilemap>();
     }
+
     private void Update()
     {
         if (bombsRemaining > 0 && Input.GetKeyDown(inputKey))
@@ -42,14 +47,14 @@ public class BombController : MonoBehaviour
         }
     }
 
-    [PunRPC]
     private IEnumerator PlaceBomb()
     {
         Vector2 position = transform.position;
         position.x = Mathf.Round(position.x);
         position.y = Mathf.Round(position.y);
 
-        GameObject bomb = Instantiate(bombPrefab, position, Quaternion.identity);
+        // Use PhotonNetwork.Instantiate to instantiate the bombPrefab
+        GameObject bomb = PhotonNetwork.Instantiate(bombPrefab.name, position, Quaternion.identity);
         bombsRemaining--;
 
         yield return new WaitForSeconds(bombFuseTime);
@@ -58,17 +63,14 @@ public class BombController : MonoBehaviour
         position.x = Mathf.Round(position.x);
         position.y = Mathf.Round(position.y);
 
-        Explosion explosion = Instantiate(explosionPrefab, position, Quaternion.identity);
-        explosion.reference(photonView);
-        explosion.SetActiveRendererNetwork(explosion.start);
-        explosion.destroyAfterNetwork(explosionDuration);
+        Explosion explosion = PhotonNetwork.Instantiate(explosionPrefab.name, position, Quaternion.identity).GetComponent<Explosion>();
+        explosion.DestroyAfterNetwork(explosionDuration);
 
         ExplodeNetwork(position, Vector2.up, explosionRadius);
         ExplodeNetwork(position, Vector2.down, explosionRadius);
         ExplodeNetwork(position, Vector2.left, explosionRadius);
         ExplodeNetwork(position, Vector2.right, explosionRadius);
 
-        
         Destroy(bomb.gameObject);
         bombsRemaining++;
     }
@@ -95,17 +97,17 @@ public class BombController : MonoBehaviour
 
         position += direction;
 
-        if (Physics2D.OverlapBox(position, Vector2.one / 2f, 0f, explosionLayerMask))
+        if (Physics2D.OverlapBox(position, Vector2.one / 2f, 0f))
         {
-            ClearDestruibleNetwork(position);
+            ClearDestructibleNetwork(position);
             return;
         }
 
-        Explosion explosion = Instantiate(explosionPrefab, position, Quaternion.identity);
-        explosion.reference(photonView);
-        explosion.SetActiveRendererNetwork(length > 1 ? explosion.middle : explosion.end);
+        GameObject explosionObj = PhotonNetwork.Instantiate(explosionPrefab.name, position, Quaternion.identity);
+        Explosion explosion = explosionObj.GetComponent<Explosion>();
+
         explosion.SetDirectionNetwork(direction);
-        explosion.destroyAfterNetwork(explosionDuration);
+        explosion.DestroyAfterNetwork(explosionDuration);
 
         ExplodeNetwork(position, direction, length - 1);
     }
@@ -115,7 +117,6 @@ public class BombController : MonoBehaviour
         photonView.RPC("Explode", RpcTarget.All, position, direction, length);
     }
 
-
     [PunRPC]    
     private void ClearDestructible(Vector2 position)
     {
@@ -124,12 +125,17 @@ public class BombController : MonoBehaviour
 
         if (tile != null)
         {
-            Instantiate(destructiblePrefab, position, Quaternion.identity);
+
+            PhotonNetwork.Instantiate(destructiblePrefab.name, position, Quaternion.identity);
+
             destructibleTiles.SetTile(cell, null);
         }
     }
-    void ClearDestruibleNetwork(Vector2 position)
+
+
+    void ClearDestructibleNetwork(Vector2 position)
     {
+        Debug.Log("ClearDestructibleNetwork called at position: " + position);
         photonView.RPC("ClearDestructible", RpcTarget.All, position);
     }
 
@@ -147,5 +153,4 @@ public class BombController : MonoBehaviour
             other.isTrigger = false;
         }
     }
-
 }

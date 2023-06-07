@@ -1,25 +1,13 @@
 using Photon.Pun;
 using UnityEngine;
 
-public class Explosion : MonoBehaviour
+public class Explosion : MonoBehaviourPunCallbacks
 {
-    public AnimatedSpriteRenderer start;
-    public AnimatedSpriteRenderer middle;
-    public AnimatedSpriteRenderer end;
-
     public PhotonView photonView;
 
-    public void reference(PhotonView go)
+    private void Awake()
     {
-        photonView = go;
-    }
-
-    [PunRPC]
-    public void SetActiveRenderer(AnimatedSpriteRenderer renderer)
-    {
-        start.enabled = renderer == start;
-        middle.enabled = renderer == middle;
-        end.enabled = renderer == end;        
+        photonView = GetComponent<PhotonView>();
     }
 
     [PunRPC]
@@ -34,17 +22,16 @@ public class Explosion : MonoBehaviour
     {
         Destroy(gameObject, seconds);
     }
-    public void SetActiveRendererNetwork(AnimatedSpriteRenderer renderer)
-    {
-        photonView.RPC("SetActiveRenderer", RpcTarget.All, renderer);
-    }
 
-    public void destroyAfterNetwork(float seconds)
-    {
-        photonView.RPC("DestroyAfter", RpcTarget.All, seconds);
-    }
+    [PunRPC]
     public void SetDirectionNetwork(Vector2 direction)
     {
         photonView.RPC("SetDirection", RpcTarget.All, direction);
+    }
+    
+    [PunRPC]
+    public void DestroyAfterNetwork(float seconds)
+    {
+        photonView.RPC("DestroyAfter", RpcTarget.All, seconds);
     }
 }

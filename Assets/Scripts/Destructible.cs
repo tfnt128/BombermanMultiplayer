@@ -1,6 +1,7 @@
 using UnityEngine;
+using Photon.Pun;
 
-public class Destructible : MonoBehaviour
+public class Destructible : MonoBehaviourPunCallbacks
 {
     public float destructionTime = 1f;
 
@@ -8,18 +9,25 @@ public class Destructible : MonoBehaviour
     public float itemSpawnChance = 0.2f;
     public GameObject[] spawnableItems;
 
-    private void Start()
+    private PhotonView photonView;
+
+    private void Awake()
     {
-        Destroy(gameObject, destructionTime);
+        photonView = GetComponent<PhotonView>();
     }
 
-    private void OnDestroy()
+    private void Start()
     {
-        if (spawnableItems.Length > 0 && Random.value < itemSpawnChance)
+        Debug.Log("AAAAAAAAAAA");
+        if (PhotonNetwork.IsMasterClient)
         {
-            int randomIndex = Random.Range(0, spawnableItems.Length);
-            Instantiate(spawnableItems[randomIndex], transform.position, Quaternion.identity);
+            DestroyAfterNetwork();
         }
     }
 
+    [PunRPC]
+    private void DestroyAfterNetwork()
+    {
+        PhotonNetwork.Destroy(gameObject);
+    }
 }
