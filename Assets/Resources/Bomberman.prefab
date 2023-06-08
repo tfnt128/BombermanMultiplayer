@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c89a3c08364fad141ad0accdf9956382, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerIcon: {fileID: -7905520708037107564, guid: 399526844e7714b45bcc6061f5e4a2c8, type: 3}
+  playerIcon: {fileID: -5166777625139363784, guid: 3aba5bfaa4148da4a89a2a251932f89d, type: 3}
   playerData: {fileID: 11400000, guid: 200a69942f4d7094db79f79916591c8b, type: 2}
 --- !u!212 &7681638191388313283
 SpriteRenderer:
@@ -86,7 +86,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 323
-  m_Sprite: {fileID: 1769754006986496279, guid: 399526844e7714b45bcc6061f5e4a2c8, type: 3}
+  m_Sprite: {fileID: -5166777625139363784, guid: 3aba5bfaa4148da4a89a2a251932f89d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
