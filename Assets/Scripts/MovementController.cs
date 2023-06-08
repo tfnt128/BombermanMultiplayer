@@ -84,6 +84,10 @@ public class MovementController : MonoBehaviour
                 screenManager.Instance.ShowVictoryScreen();
             }
         }
+        else
+        {
+            screenManager.Instance.ShowVictoryScreen();
+        }
 
         gameObject.SetActive(false);
     }
