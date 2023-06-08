@@ -74,14 +74,9 @@ public class MovementController : MonoBehaviour
     {
         if (_photonview.IsMine)
         {
-            Debug.Log(isDefeated + "= ganhei ou perdi?");
             if (isDefeated)
             {
                 screenManager.Instance.ShowDefeatScreen();
-            }
-            else
-            {
-                screenManager.Instance.ShowVictoryScreen();
             }
         }
         else

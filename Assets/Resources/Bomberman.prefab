@@ -1117,7 +1117,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Come\xE7ar"
+  m_Text: Start
 --- !u!1 &6628809855906134565
 GameObject:
   m_ObjectHideFlags: 0
@@ -1271,7 +1271,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Sele\xE7\xE3o de Personagem"
+  m_Text: Player selection
 --- !u!1 &6628809856072340365
 GameObject:
   m_ObjectHideFlags: 0
