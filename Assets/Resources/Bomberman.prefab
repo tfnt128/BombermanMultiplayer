@@ -1492,7 +1492,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c89a3c08364fad141ad0accdf9956382, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerIcon: {fileID: -1955984481447874758, guid: 22cd15ec83fed3b4db95f16835a5416d, type: 3}
+  playerIcon: {fileID: 7363325003671039503, guid: 258ee86fc0846c047bc6a2e0fdd24cad, type: 3}
   playerData: {fileID: 11400000, guid: 278bfa43d25a30a4ca72aadc16a1e038, type: 2}
 --- !u!212 &929757362389943503
 SpriteRenderer:
