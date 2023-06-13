@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="1957ebdd-ee09-46c6-89fe-189c7f762b3a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BombermanMultiplayer/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BombermanMultiplayer/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Bomberman.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Bomberman.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainMenu.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene_Profiles/Volume Profile.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene_Profiles/Volume Profile.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +99,7 @@
       <workItem from="1685469817250" duration="459000" />
       <workItem from="1685470321684" duration="1427000" />
       <workItem from="1685473278821" duration="3009000" />
-      <workItem from="1686669196577" duration="1441000" />
+      <workItem from="1686669196577" duration="2035000" />
     </task>
     <servers />
   </component>
