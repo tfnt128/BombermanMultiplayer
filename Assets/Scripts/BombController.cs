@@ -49,6 +49,7 @@ public class BombController : MonoBehaviourPunCallbacks
 
     private IEnumerator PlaceBomb()
     {
+        bool spawnBomb;
         Vector2 position = transform.position;
         position.x = Mathf.Round(position.x);
         position.y = Mathf.Round(position.y);
